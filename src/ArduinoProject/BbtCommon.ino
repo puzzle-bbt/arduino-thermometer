@@ -4,24 +4,6 @@ void initSerial() {
   Serial.println();
 }
 
-/* 
- *  Connect to the WiFi.
- */
-void connectToWiFi() {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  
-  Serial.println();
-  Serial.print("Connected to ");
-  Serial.println(WIFI_SSID);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-}
-
 
 /*
  * A simple pause function.

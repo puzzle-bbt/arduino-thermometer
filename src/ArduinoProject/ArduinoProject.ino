@@ -16,20 +16,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
 
-// Wifi
-
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-
-// #define WIFI_SSID "puzzleguest"
-// #define WIFI_PASSWORD "Tarwinn7"
-
-#define WIFI_SSID "Matarese.guest"
-#define WIFI_PASSWORD "Madrid_Mai"
-
-ESP8266WebServer server(80);
 
 
 // Button
@@ -62,14 +48,6 @@ void setup() {
   display.setTextColor(WHITE);
   display.setCursor(0,0);
 
-  //Wifi
-   // onboard LED
-  pinMode(LED_BUILTIN, OUTPUT);
-  digitalWrite(LED_BUILTIN, HIGH);
-  connectToWiFi();
-  initWebserver();
-  Serial.println("HTTP server started");
-
 
   //Button
     // initialize the buttons as inputs
@@ -84,10 +62,6 @@ void loop() {
 
   // Button
   readButtonState();
-
-  //Wifi
-  //  int led_state = digitalReadOutputPin(LED_BUILTIN);
-  server.handleClient();
 }
 
 void getMeasurment() {
