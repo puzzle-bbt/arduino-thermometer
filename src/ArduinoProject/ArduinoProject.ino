@@ -17,7 +17,6 @@ Adafruit_SSD1306 display(OLED_RESET);
 #endif
 
 
-
 // Button
 // constants won't change. They're used here to set pin numbers:
 const int buttonA = 14;     // GPIO14 => WeMos D1 mini: Pin D5
@@ -26,6 +25,12 @@ const int buttonB = 12;     // GPIO12 => WeMos D1 mini: Pin D6
 // variables will change:
 int buttonStateA = 0;
 int buttonStateB = 0;
+
+
+// RESTClient
+#include "RestClient.h"
+
+boolean onMenuPage = false;
 
 
 void setup() { 
@@ -50,18 +55,24 @@ void setup() {
 
 
   //Button
-    // initialize the buttons as inputs
+  // initialize the buttons as inputs
   pinMode(buttonA, INPUT);
   pinMode(buttonB, INPUT);
+
 }
 
 void loop() {
+  Serial.println("looop");
   // put your main code here, to run repeatedly:
-  getMeasurment();
-  pause();
 
-  // Button
-  readButtonState();
+  menuButtonPressed();
+  
+  if(onMenuPage) {
+    Serial.println("Menu Page true");
+     showMenu();
+  } else {
+     getMeasurment();
+  }
 }
 
 void getMeasurment() {
@@ -85,7 +96,7 @@ void getMeasurment() {
 
   Serial.print(F("%;  Temperatur: "));
   Serial.print(t);
-    Serial.print(F("°C "));
+  Serial.print(F("°C "));
 
   Serial.print(F(";  Hitzeindex: "));
   Serial.print(hic);
@@ -110,52 +121,38 @@ void getMeasurment() {
   display.println();
   display.println();
   
-  display.println("For options:");
-  display.println("Click A");
+  display.println("For options: Click A");
       
   display.display();
-  digitalWrite(LED_BUILTIN, HIGH);
-  pause(); 
+ 
  
   delay(100);
+
   
 }
 
-void readButtonState() {
+boolean menuButtonPressed() {
   buttonStateA = digitalRead(buttonA);
   buttonStateB = digitalRead(buttonB);
-
    
   if (buttonStateA == LOW) {
-    Serial.print("A ");
+    onMenuPage = true;
+    return true;
+  } else if (buttonStateB == LOW) {
+    onMenuPage = false;
+    return false;
+  }
+
+  delay(100);
+}
+
+void showMenu() {
     display.clearDisplay();
     display.setCursor(0,0);
     display.setTextSize(1);
-
     display.println("Press A to change webserver state");
     display.println("Press B to go back");
     display.println();
-
     display.display();
 
-    if (buttonStateA == LOW) {
-      display.clearDisplay();
-      display.setCursor(0,0);
-      display.setTextSize(1);
-      display.println("Press A to turn webserver on");
-      display.println("Press B to turn webserver off");
-      display.display();
-
-      if (buttonStateA == LOW) {
-        // Turn on 
-        
-      } 
-      else if (buttonStateB == LOW) {
-        // Turn off
-      }
-    }
-  }
- 
-  Serial.println();
-  delay(200);
 }

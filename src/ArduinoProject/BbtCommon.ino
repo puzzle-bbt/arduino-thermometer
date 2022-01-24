@@ -28,6 +28,7 @@ void waitForStart() {
 boolean hasAPressed() {
   if(Serial.available() > 0) {
     char c = Serial.read();
+   
     
     if (c != '\n') Serial.print(c);
     if (c == 'A') return true;

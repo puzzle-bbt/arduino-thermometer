@@ -1,0 +1,17 @@
+{
+  "name": "nodejs-server",
+  "version": "0.1.0",
+  "description": "NodeJS server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:local": "node -r dotenv/config server.js dotenv_config_path=.local/.env"
+  },
+  "author": "",
+  "license": "AGPL-3.0 License",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.16.4",
+    "express-rate-limit": "^5.1.1"
+  }
+}
