@@ -16,3 +16,16 @@ exports.sayHello = (name) => {
 exports.sayHelloAsync = async (timeRange) => {
     return `I wish you a nice ${timeRange}.`
 }
+
+exports.createTable = (datas) => {
+    var table = '<tr>'
+    for (var i = 0; i < datas.length; i++) {
+        '<td>' +
+        datas[i] +
+        '</td>'
+    }
+    '</tr>';
+
+    return table;
+
+}
