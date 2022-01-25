@@ -29,12 +29,18 @@ app.get("/htmlResponse", (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
 
     service.sayHelloAsync('day').then(message => {
+        var array = ["Test1", "Test2"];
+        createTable(array)
         res.send(
             `
 <html lang="en">
     <body>
-        <h1>Html Response</h1>
-        <p>Hello Lias</p>
+        <h1>Arduino thermometer</h1>
+        <h3>Letzte Messung</h3>
+        <!--
+        Daten aus REST von einem Array in eine table
+          -->
+          <table class="table"></table>
         <img src="/images/puzzle.png" alt="Puzzle ITC logo"><br>
         <a href="/api/v1/info">rest call</a>
     </body>
@@ -44,6 +50,21 @@ app.get("/htmlResponse", (req, res) => {
 
 
 });
+
+function createTable(tableData) {
+    var table = document.getElementsByClassName("class");
+    var tableBody = document.createElement('tbody');
+
+    for (var i = 0; i < tableData.length; i++) {
+        var row = document.createElement('tr');
+        row.textContent = tableData[i];
+        tableBody.appendChild(row);
+    }
+
+    table.appendChild(tableBody);
+    document.body.appendChild(table);
+}
+
 
 // ---- SERVE STATIC FILES ---- //
 const angular_folder = process.env.ANGULAR_FOLDER || 'static';
