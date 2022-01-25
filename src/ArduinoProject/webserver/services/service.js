@@ -18,13 +18,15 @@ exports.sayHelloAsync = async (timeRange) => {
 }
 
 exports.createTable = (datas) => {
-    var table = '<tr>'
+    var table;
     for (var i = 0; i < datas.length; i++) {
+        table =
+        '<tr>' +
         '<td>' +
         datas[i] +
-        '</td>'
+        '</td>' +
+        '</tr>';
     }
-    '</tr>';
 
     return table;
 
