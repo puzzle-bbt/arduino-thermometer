@@ -78,12 +78,9 @@ void loop() {
   menuButtonPressed();
   
   if(onMenuPage) {
-    Serial.println("on Menu page");
     if (onChangingPage) {
-      Serial.println("on changing page");
       showChangingPage();
     } else {
-      Serial.println("Changing page false show menu");
      showMenu();
     }
   } else {
@@ -160,50 +157,49 @@ boolean menuButtonPressed() {
 }
 
 void showMenu() {
-    display.clearDisplay();
-    display.setCursor(0,0);
-    display.setTextSize(1);
-    display.println("Press A to change webserver state");
-    display.println("Press B to go back");
-    display.println();
-    display.display();
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.setTextSize(1);
+  display.println("Press A to change webserver state");
+  display.println("Press B to go back");
+  display.println();
+  display.display();
 
-    buttonStateA = digitalRead(buttonA);
-    buttonStateB = digitalRead(buttonB);
-     
-    if (buttonStateA == LOW) {
-        onChangingPage = true;
-     }
-     else if (buttonStateB == LOW) {
-      Serial.println("B LOW");
-      onMenuPage = false;
-      onChangingPage = false;
-    }
-  
-    delay(100);
-    pause();
+  buttonStateA = digitalRead(buttonA);
+  buttonStateB = digitalRead(buttonB);
+   
+  if (buttonStateA == LOW) {
+      onChangingPage = true;
+   }
+   else if (buttonStateB == LOW) {
+    onMenuPage = false;
+    onChangingPage = false;
+  }
+
+  delay(100);
+  pause();
 }
 
 void showChangingPage() {
-    display.clearDisplay();
-    display.setCursor(0,0);
-    display.setTextSize(1);
-    display.println("Press A to start WS");
-    display.println("Press B to stop WS");
-    display.display();
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.setTextSize(1);
+  display.println("Press A to start WS");
+  display.println("Press B to stop WS");
+  display.display();
 
-    buttonStateA = digitalRead(buttonA);
-    buttonStateB = digitalRead(buttonB);
-   
-    if (buttonStateA == LOW) {
-        // Start ws
-     }
-     else if (buttonStateB == LOW) {
-      // Stop ws
-    }
-  
-    onChangingPage = false;
-  
-    delay(100);
-    pause();
+  buttonStateA = digitalRead(buttonA);
+  buttonStateB = digitalRead(buttonB);
+ 
+  if (buttonStateA == LOW) {
+      // Start ws
+   }
+   else if (buttonStateB == LOW) {
+    // Stop ws
+  }
+
+  onChangingPage = false;
+
+  delay(100);
+  pause();
 }
