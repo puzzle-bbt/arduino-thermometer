@@ -29,8 +29,12 @@ int buttonStateB = 0;
 
 // RESTClient
 #include "RestClient.h"
+//RestClient client = RestClient("localhost:8080");
+RestClient client = RestClient("127.0.0.1",8080);
+
 
 boolean onMenuPage = false;
+boolean onChangingPage = false;
 
 
 void setup() { 
@@ -59,17 +63,29 @@ void setup() {
   pinMode(buttonA, INPUT);
   pinMode(buttonB, INPUT);
 
+
+  //Webserver
+  client.begin("Matarese.guest", "Madrid_Mai");
+    
+  String response = "";
+  int statusCode = client.get("/api/v1/info", &response);
+  Serial.println(statusCode);
+  Serial.println(response);
+
 }
 
 void loop() {
-  Serial.println("looop");
-  // put your main code here, to run repeatedly:
-
   menuButtonPressed();
   
   if(onMenuPage) {
-    Serial.println("Menu Page true");
+    Serial.println("on Menu page");
+    if (onChangingPage) {
+      Serial.println("on changing page");
+      showChangingPage();
+    } else {
+      Serial.println("Changing page false show menu");
      showMenu();
+    }
   } else {
      getMeasurment();
   }
@@ -122,28 +138,25 @@ void getMeasurment() {
   display.println();
   
   display.println("For options: Click A");
-      
   display.display();
  
- 
   delay(100);
-
-  
 }
 
 boolean menuButtonPressed() {
   buttonStateA = digitalRead(buttonA);
   buttonStateB = digitalRead(buttonB);
    
-  if (buttonStateA == LOW) {
+  if (buttonStateA == LOW) {  
     onMenuPage = true;
     return true;
-  } else if (buttonStateB == LOW) {
-    onMenuPage = false;
-    return false;
+  } else if (buttonStateB == LOW && !onChangingPage) {
+      onMenuPage = false;
+      return false;
   }
 
   delay(100);
+  pause();
 }
 
 void showMenu() {
@@ -155,4 +168,42 @@ void showMenu() {
     display.println();
     display.display();
 
+    buttonStateA = digitalRead(buttonA);
+    buttonStateB = digitalRead(buttonB);
+     
+    if (buttonStateA == LOW) {
+        onChangingPage = true;
+     }
+     else if (buttonStateB == LOW) {
+      Serial.println("B LOW");
+      onMenuPage = false;
+      onChangingPage = false;
+    }
+  
+    delay(100);
+    pause();
+}
+
+void showChangingPage() {
+    display.clearDisplay();
+    display.setCursor(0,0);
+    display.setTextSize(1);
+    display.println("Press A to start WS");
+    display.println("Press B to stop WS");
+    display.display();
+
+    buttonStateA = digitalRead(buttonA);
+    buttonStateB = digitalRead(buttonB);
+   
+    if (buttonStateA == LOW) {
+        // Start ws
+     }
+     else if (buttonStateB == LOW) {
+      // Stop ws
+    }
+  
+    onChangingPage = false;
+  
+    delay(100);
+    pause();
 }
