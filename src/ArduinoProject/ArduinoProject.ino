@@ -28,7 +28,11 @@ int buttonStateB = 0;
 
 
 // RESTClient
-#include "RestClient.h"
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+#define WIFI_SSID "Mux1883"
+#define WIFI_PASSWORD "dwqbbhg3uxsstkar"
 
 boolean onMenuPage = false;
 
@@ -59,6 +63,19 @@ void setup() {
   pinMode(buttonA, INPUT);
   pinMode(buttonB, INPUT);
 
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  delay(500);
 }
 
 void loop() {
@@ -73,6 +90,22 @@ void loop() {
   } else {
      getMeasurment();
   }
+
+
+  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+      HTTPClient http;  //Declare an object of class HTTPClient
+      http.begin("http://192.168.1.124:8080/htmlResponse");
+      int httpCode = http.GET();
+
+      if (httpCode > 0) { //Check the returning code
+        String payload = http.getString();   //Get the request response payload
+        Serial.println(payload);             //Print the response payload
+      }
+
+      http.end();   //Close connection
+    }
+
+    delay(5000);
 }
 
 void getMeasurment() {
