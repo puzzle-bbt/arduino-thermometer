@@ -34,7 +34,6 @@ int buttonStateB = 0;
 #define WIFI_SSID "Matarese.guest"
 #define WIFI_PASSWORD "Madrid_Mai"
 
-
 boolean onMenuPage = false;
 boolean onChangingPage = false;
 
@@ -97,6 +96,7 @@ void loop() {
 
 
   sendRestCall(urlParams);
+
 }
 
 void sendRestCall(String urlParams) {
