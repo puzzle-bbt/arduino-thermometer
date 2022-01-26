@@ -27,35 +27,21 @@ app.get("/api/v1/info", (req, res) => {
 app.get("/htmlResponse", (req, res) => {
     res.status(200);
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
-    service.sayHelloAsync('day').then(message => {
-        let data = ["28%, 23.00, 2", "50%, 20.50, 6"];
+
+    const test = ["Wert1", "Wert2", "Wert3"];
+
+    service.createTable(test).then(message => {
         res.send(
-            `
-            <html lang="en">
-            <body>
-            <h1>Arduino thermometer</h1>
-            <h3>Letzte Messung</h3>
-            <table class="table">
-               ${service.createTable(data)}
-            </table>
- 
-            <table class="table"></table>
-            <img src="/images/thermometer.png" alt="Thermometer png" width="auto" height="200px"><br>
-            
-            <!--
-            <a href="/api/v1/info">rest call</a>
-            -->
-            </body>
-            </html>
-        `);
+            message
+        );
     });
+
 
 });
 
-
 // ---- SERVE STATIC FILES ---- //
-const static_folder = process.env.ANGULAR_FOLDER || 'static';
-app.get('*.*', express.static(static_folder, {maxAge: '1d'}));
+const angular_folder = process.env.ANGULAR_FOLDER || 'static';
+app.get('*.*', express.static(angular_folder, {maxAge: '1d'}));
 
 // ---- START WEBSERVER ---- //
 const port = process.env.PORT || 8080;
