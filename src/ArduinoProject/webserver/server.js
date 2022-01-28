@@ -72,10 +72,12 @@ app.get("/htmlResponse", (req, res) => {
 });
 
 app.get("/changeWebserver/:changing", (req) => {
-    console.log("Changing is here");
     let changing = req.params.changing;
-
-    // Turn webserver on / off
+    if (changing === "start") {
+        // Turn on
+    } else if (changing === "stop") {
+        // Stop WS
+    }
 });
 
 // ---- SERVE STATIC FILES ---- //

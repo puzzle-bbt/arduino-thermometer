@@ -229,14 +229,14 @@ void showChangingPage() {
   buttonStateB = digitalRead(buttonB);
  
   if (buttonStateA == LOW) {
-    Serial.println("Button a ist low now oder");
-      changeWebserver(true);
+      changeWebserver("start");
       onChangingPage = false;
+      onMenuPage = true;
    }
    else if (buttonStateB == LOW) {
-        Serial.println("Button b ist low now oder");
-     changeWebserver(false);
+     changeWebserver("stop");
      onChangingPage = false;
+     onMenuPage = true;
   }
 
 
@@ -244,7 +244,7 @@ void showChangingPage() {
   pause();
 }
 
-void changeWebserver(boolean changing) {
+void changeWebserver(String changing) {
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
       HTTPClient http;  //Declare an object of class HTTPClient
       String url = "http://192.168.141.18:8080/changeWebserver/" + changing;
