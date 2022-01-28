@@ -96,7 +96,6 @@ void loop() {
 
 
   sendRestCall(urlParams);
-
 }
 
 void sendRestCall(String urlParams) {
