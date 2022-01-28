@@ -10,9 +10,19 @@ exports.createList = async (datas) => {
 exports.createTable = async (datas) => {
     let table = "<table>";
     let text = "<tr>";
-    for (var i = 0; i < datas.length; i++) {
-        text += "<td>" + datas[i] + "</td>" + "</tr>";
+    let title = "<td class='headRow'>Temperatur</td>" +
+        "<td class='headRow'>Humidity</td>" +
+        "<td class='headRow'>Heat index</td>";
+    for (var i = datas.length - 1; i != -1 ; i--) {
+        let temp = datas[i].split(",")[0];
+        let hum = datas[i].split(",")[1];
+        let hi = datas[i].split(",")[2];
+        text += "<td class='listItem'>" + temp + "</td>" +
+            "<td class='listItem'>" + hum + "</td>" +
+            "<td class='listItem'>" + hi + "</td>" +
+            "</tr>";
     }
-    table += text + "</table>";
+    table += title + text + "</table>";
+
     return table;
 }

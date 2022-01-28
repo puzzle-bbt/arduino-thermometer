@@ -28,9 +28,11 @@ int buttonStateB = 0;
 
 
 // RESTClient
-#include "RestClient.h"
-//RestClient client = RestClient("localhost:8080");
-RestClient client = RestClient("127.0.0.1",8080);
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+
+#define WIFI_SSID "Matarese.guest"
+#define WIFI_PASSWORD "Madrid_Mai"
 
 
 boolean onMenuPage = false;
@@ -64,18 +66,25 @@ void setup() {
   pinMode(buttonB, INPUT);
 
 
-  //Webserver
-  client.begin("Matarese.guest", "Madrid_Mai");
-    
-  String response = "";
-  int statusCode = client.get("/api/v1/info", &response);
-  Serial.println(statusCode);
-  Serial.println(response);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+  delay(500);
+
 
 }
 
 void loop() {
   menuButtonPressed();
+  String urlParams;
   
   if(onMenuPage) {
     if (onChangingPage) {
@@ -84,11 +93,34 @@ void loop() {
      showMenu();
     }
   } else {
-     getMeasurment();
+     urlParams = getMeasurment();
   }
+
+
+  sendRestCall(urlParams);
 }
 
-void getMeasurment() {
+void sendRestCall(String urlParams) {
+  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+      HTTPClient http;  //Declare an object of class HTTPClient
+      String url = "http://192.168.141.18:8080/sendDatas/" + urlParams;
+      Serial.println(url);
+      http.begin(url);
+      int httpCode = http.GET();
+      Serial.println(httpCode);
+
+      if (httpCode > 0) { //Check the returning code
+        String payload = http.getString();   //Get the request response payload
+        Serial.println(payload);             //Print the response payload
+      }
+
+      http.end();   //Close connection
+    }
+
+    delay(5000);
+}
+
+String getMeasurment() {
   float h = dht.readHumidity();
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
@@ -98,7 +130,7 @@ void getMeasurment() {
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {
     Serial.println(F("Failed to read from DHT sensor!"));
-    return;
+    return "Failed to read";
   }
 
   // Compute heat index in Celsius (isFahreheit = false)
@@ -136,6 +168,10 @@ void getMeasurment() {
   
   display.println("For options: Click A");
   display.display();
+
+  String url = "" + String(t,2) + "/" + String(h,2) + "/" + String(hic,2); // Build string with 2 decimal places
+  return url;
+
  
   delay(100);
 }
@@ -165,6 +201,7 @@ void showMenu() {
   display.println();
   display.display();
 
+
   buttonStateA = digitalRead(buttonA);
   buttonStateB = digitalRead(buttonB);
    
@@ -192,14 +229,38 @@ void showChangingPage() {
   buttonStateB = digitalRead(buttonB);
  
   if (buttonStateA == LOW) {
-      // Start ws
+    Serial.println("Button a ist low now oder");
+      changeWebserver(true);
+      onChangingPage = false;
    }
    else if (buttonStateB == LOW) {
-    // Stop ws
+        Serial.println("Button b ist low now oder");
+     changeWebserver(false);
+     onChangingPage = false;
   }
 
-  onChangingPage = false;
 
   delay(100);
   pause();
+}
+
+void changeWebserver(boolean changing) {
+  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+      HTTPClient http;  //Declare an object of class HTTPClient
+      String url = "http://192.168.141.18:8080/changeWebserver/" + changing;
+      Serial.println(url);
+      http.begin(url);
+      int httpCode = http.GET();
+      Serial.println(httpCode);
+
+      if (httpCode > 0) { //Check the returning code
+        String payload = http.getString();   //Get the request response payload
+        Serial.println(payload);             //Print the response payload
+      }
+
+      http.end();   //Close connection
+    }
+
+    delay(5000);
+
 }

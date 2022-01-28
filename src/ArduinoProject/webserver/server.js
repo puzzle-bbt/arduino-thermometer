@@ -6,6 +6,9 @@ const express = require('express');
 const app = express();
 const _environment = process.environment || 'production';
 
+var dataArray = new Array;
+
+
 if (_environment === 'production') {
     const rateLimit = require("express-rate-limit");
     const limiter = rateLimit({
@@ -17,10 +20,14 @@ if (_environment === 'production') {
 }
 
 // ---- SERVE REST CALLS ----
-app.get("/api/v1/info", (req, res) => {
+app.get("/sendDatas/:temp/:hum/:hic", (req, res) => {
+    let datasFromMessage = req.params.temp + "," + req.params.hum + "," + req.params.hic
+    dataArray.push(datasFromMessage);
+
     res.json({
-        info: 'This is the /api/v1/info rest call.'
+        info: 'This is the /sendDatas rest call.'
     });
+
 });
 
 // ---- SERVE HTML ----
@@ -28,15 +35,47 @@ app.get("/htmlResponse", (req, res) => {
     res.status(200);
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
 
-    const test = ["Wert1", "Wert2", "Wert3"];
 
-    service.createTable(test).then(message => {
-        res.send(
+      service.createTable(dataArray).then(message => {
+        res.send(  `
+            <html>
+            <head>
+             <style>
+              td {
+              font-size: 20px;
+              padding-right: 20px;
+              padding-left: 20px;
+              }
+              .headRow {
+              font-weight: bold;
+              text-decoration: underline;
+              }
+              .listItem {
+              text-align: center;
+              }
+              </style>
+            </head>
+            <body>
+            <h1 class="test">Arduino Thermometer</h1>
+            <h2>A puzzle project by Niklas and Lias</h2>
+            ` +
             message
+            +
+            `
+          </body>
+          </html>
+          `
+
         );
     });
 
+});
 
+app.get("/changeWebserver/:changing", (req) => {
+    console.log("Changing is here");
+    let changing = req.params.changing;
+
+    // Turn webserver on / off
 });
 
 // ---- SERVE STATIC FILES ---- //
