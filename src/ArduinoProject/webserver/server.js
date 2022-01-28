@@ -39,8 +39,24 @@ app.get("/htmlResponse", (req, res) => {
       service.createTable(dataArray).then(message => {
         res.send(  `
             <html>
+            <head>
+             <style>
+              td {
+              font-size: 20px;
+              padding-right: 20px;
+              padding-left: 20px;
+              }
+              .headRow {
+              font-weight: bold;
+              text-decoration: underline;
+              }
+              .listItem {
+              text-align: center;
+              }
+              </style>
+            </head>
             <body>
-            <h1 class="hund">Arduino Thermometer</h1>
+            <h1 class="test">Arduino Thermometer</h1>
             <h2>A puzzle project by Niklas and Lias</h2>
             ` +
             message
