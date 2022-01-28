@@ -31,8 +31,8 @@ int buttonStateB = 0;
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-#define WIFI_SSID "Mux1883"
-#define WIFI_PASSWORD "dwqbbhg3uxsstkar"
+#define WIFI_SSID "Matarese.guest"
+#define WIFI_PASSWORD "Madrid_Mai"
 
 boolean onMenuPage = false;
 
@@ -83,19 +83,27 @@ void loop() {
   // put your main code here, to run repeatedly:
 
   menuButtonPressed();
+  String urlParams;
   
   if(onMenuPage) {
     Serial.println("Menu Page true");
      showMenu();
   } else {
-     getMeasurment();
+     urlParams = getMeasurment();
   }
 
 
+  sendRestCall(urlParams);
+}
+
+void sendRestCall(String urlParams) {
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
       HTTPClient http;  //Declare an object of class HTTPClient
-      http.begin("http://192.168.1.124:8080/htmlResponse");
+      String url = "http://192.168.141.18:8080/sendDatas/" + urlParams;
+      Serial.println(url);
+      http.begin(url);
       int httpCode = http.GET();
+      Serial.println(httpCode);
 
       if (httpCode > 0) { //Check the returning code
         String payload = http.getString();   //Get the request response payload
@@ -108,7 +116,7 @@ void loop() {
     delay(5000);
 }
 
-void getMeasurment() {
+String getMeasurment() {
   float h = dht.readHumidity();
   // Read temperature as Celsius (the default)
   float t = dht.readTemperature();
@@ -118,7 +126,7 @@ void getMeasurment() {
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {
     Serial.println(F("Failed to read from DHT sensor!"));
-    return;
+    return "Fail";
   }
 
   // Compute heat index in Celsius (isFahreheit = false)
@@ -157,6 +165,9 @@ void getMeasurment() {
   display.println("For options: Click A");
       
   display.display();
+
+  String url = "" + String(h,2) + "/" + String(t,2) + "/" + String(hic,2);
+  return url;
  
  
   delay(100);

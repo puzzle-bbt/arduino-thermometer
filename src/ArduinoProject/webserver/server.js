@@ -17,14 +17,22 @@ if (_environment === 'production') {
 }
 
 // ---- SERVE REST CALLS ----
-app.get("/api/v1/info", (req, res) => {
+app.get("/sendDatas/:temp/:h/:hic", (req, res) => {
+    console.log("Get api / info");
+    console.log("Temp: " + req.params.temp);
+    console.log("Hum: " + req.params.h);
+    console.log("Hic: " + req.params.hic);
+
+
     res.json({
-        info: 'This is the /api/v1/info rest call.'
+        info: 'This is the /sendDatas rest call.'
     });
+
 });
 
 // ---- SERVE HTML ----
 app.get("/htmlResponse", (req, res) => {
+    console.log("Html response");
     res.status(200);
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
 
@@ -36,7 +44,7 @@ app.get("/htmlResponse", (req, res) => {
         <h1>Html Response</h1>
         <p>Hello Lias</p>
         <img src="/images/puzzle.png" alt="Puzzle ITC logo"><br>
-        <a href="/api/v1/info">rest call</a>
+        <a href="/sendDatas">rest call</a>
     </body>
 </html>
         `);
