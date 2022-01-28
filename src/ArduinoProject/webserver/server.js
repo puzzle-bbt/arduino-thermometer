@@ -6,6 +6,9 @@ const express = require('express');
 const app = express();
 const _environment = process.environment || 'production';
 
+var dataArray = new Array;
+
+
 if (_environment === 'production') {
     const rateLimit = require("express-rate-limit");
     const limiter = rateLimit({
@@ -17,12 +20,9 @@ if (_environment === 'production') {
 }
 
 // ---- SERVE REST CALLS ----
-app.get("/sendDatas/:temp/:h/:hic", (req, res) => {
-    console.log("Get api / info");
-    console.log("Temp: " + req.params.temp);
-    console.log("Hum: " + req.params.h);
-    console.log("Hic: " + req.params.hic);
-
+app.get("/sendDatas/:temp/:hum/:hic", (req, res) => {
+    let datasFromMessage = req.params.temp + "," + req.params.hum + "," + req.params.hic
+    dataArray.push(datasFromMessage);
 
     res.json({
         info: 'This is the /sendDatas rest call.'
@@ -32,20 +32,33 @@ app.get("/sendDatas/:temp/:h/:hic", (req, res) => {
 
 // ---- SERVE HTML ----
 app.get("/htmlResponse", (req, res) => {
-    console.log("Html response");
     res.status(200);
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
 
-    const test = ["Wert1", "Wert2", "Wert3"];
 
-    service.createTable(test).then(message => {
-        res.send(
-
+      service.createTable(dataArray).then(message => {
+        res.send(  `
+            <html>
+            <body>
+            <h1 class="hund">Arduino Thermometer</h1>
+            <h2>A puzzle project by Niklas and Lias</h2>
+            ` +
             message
+            +
+            `
+          </body>
+          </html>
+          `
         );
     });
 
+});
 
+app.get("/changeWebserver/:changing", (req) => {
+    console.log("Changing is here");
+    let changing = req.params.changing;
+
+    // Turn webserver on / off
 });
 
 // ---- SERVE STATIC FILES ---- //

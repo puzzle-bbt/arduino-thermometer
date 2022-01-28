@@ -167,7 +167,7 @@ String getMeasurment() {
   display.println("For options: Click A");
   display.display();
 
-  String url = "" + String(h,2) + "/" + String(t,2) + "/" + String(hic,2);
+  String url = "" + String(t,2) + "/" + String(h,2) + "/" + String(hic,2);
   return url;
  
   delay(100);
@@ -225,14 +225,37 @@ void showChangingPage() {
   buttonStateB = digitalRead(buttonB);
  
   if (buttonStateA == LOW) {
-      // Start ws
+    Serial.println("Button a ist low now oder");
+      changeWebserver(true);
+      onChangingPage = false;
    }
    else if (buttonStateB == LOW) {
-    // Stop ws
+        Serial.println("Button b ist low now oder");
+     changeWebserver(false);
+     onChangingPage = false;
   }
 
-  onChangingPage = false;
 
   delay(100);
   pause();
+}
+
+void changeWebserver(boolean changing) {
+  if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
+      HTTPClient http;  //Declare an object of class HTTPClient
+      String url = "http://192.168.141.18:8080/changeWebserver/" + changing;
+      Serial.println(url);
+      http.begin(url);
+      int httpCode = http.GET();
+      Serial.println(httpCode);
+
+      if (httpCode > 0) { //Check the returning code
+        String payload = http.getString();   //Get the request response payload
+        Serial.println(payload);             //Print the response payload
+      }
+
+      http.end();   //Close connection
+    }
+
+    delay(5000);
 }
