@@ -128,7 +128,7 @@ String getMeasurment() {
   // Check if any reads failed and exit early (to try again).
   if (isnan(h) || isnan(t)) {
     Serial.println(F("Failed to read from DHT sensor!"));
-    return "Fail";
+    return "Failed to read";
   }
 
   // Compute heat index in Celsius (isFahreheit = false)
@@ -167,7 +167,7 @@ String getMeasurment() {
   display.println("For options: Click A");
   display.display();
 
-  String url = "" + String(t,2) + "/" + String(h,2) + "/" + String(hic,2);
+  String url = "" + String(t,2) + "/" + String(h,2) + "/" + String(hic,2); // Build string with 2 decimal places
   return url;
  
   delay(100);
