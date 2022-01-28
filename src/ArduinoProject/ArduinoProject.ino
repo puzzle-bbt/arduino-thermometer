@@ -34,6 +34,7 @@ int buttonStateB = 0;
 #define WIFI_SSID "Matarese.guest"
 #define WIFI_PASSWORD "Madrid_Mai"
 
+
 boolean onMenuPage = false;
 boolean onChangingPage = false;
 
@@ -77,6 +78,7 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   delay(500);
+
 
 }
 
@@ -169,6 +171,7 @@ String getMeasurment() {
 
   String url = "" + String(t,2) + "/" + String(h,2) + "/" + String(hic,2); // Build string with 2 decimal places
   return url;
+
  
   delay(100);
 }
@@ -197,6 +200,7 @@ void showMenu() {
   display.println("Press B to go back");
   display.println();
   display.display();
+
 
   buttonStateA = digitalRead(buttonA);
   buttonStateB = digitalRead(buttonB);
@@ -258,4 +262,5 @@ void changeWebserver(boolean changing) {
     }
 
     delay(5000);
+
 }

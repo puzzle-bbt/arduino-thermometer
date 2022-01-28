@@ -23,5 +23,6 @@ exports.createTable = async (datas) => {
             "</tr>";
     }
     table += title + text + "</table>";
+
     return table;
 }
