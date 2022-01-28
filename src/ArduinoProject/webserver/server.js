@@ -28,18 +28,12 @@ app.get("/htmlResponse", (req, res) => {
     res.status(200);
     res.setHeader('Access-Control-Allow-Origin', '*'); // allow cross origin
 
-    service.sayHelloAsync('day').then(message => {
+    const test = ["Wert1", "Wert2", "Wert3"];
+
+    service.createTable(test).then(message => {
         res.send(
-            `
-<html lang="en">
-    <body>
-        <h1>Html Response</h1>
-        <p>Hello Lias</p>
-        <img src="/images/puzzle.png" alt="Puzzle ITC logo"><br>
-        <a href="/api/v1/info">rest call</a>
-    </body>
-</html>
-        `);
+            message
+        );
     });
 
 
