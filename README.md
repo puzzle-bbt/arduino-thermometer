@@ -1,4 +1,4 @@
-# arduino-thermometer
+# Arduino-thermometer
 A Puzzle-bbt project to measure temperature and humidity
 
 ## Hilfsmittel
