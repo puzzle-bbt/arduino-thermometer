@@ -13,7 +13,7 @@ A Puzzle-bbt project to measure temperature and humidity
 
 Das System besteht aus vier Boards (von oben nach unten):
 
-- Kleines Display mit zwei Tastern
+- Kleines Display mit zwei Tasten
 - Der Microcontroller mit einer onboard LED und der Reset-Taste
 - Der Batterie Shield, zum Anschliessen der 3V Batterie
 - Der Temperatur- und Feuchtigkeits-Sensor (zu unterst, damit die Temperaturmessung nicht von der Abwärme des Systems verfälscht wird)
