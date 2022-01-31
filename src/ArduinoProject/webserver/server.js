@@ -52,10 +52,6 @@ app.get("/htmlResponse", (req, res) => {
               .listItem {
               text-align: center;
               }
-              .highest {
-               font-weight: bold;
-              text-decoration: underline;
-              }
               </style>
               <title>Puzzle Temperature</title>
             </head>
