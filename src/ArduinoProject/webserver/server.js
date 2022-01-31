@@ -8,7 +8,6 @@ const _environment = process.environment || 'production';
 
 var dataArray = new Array;
 
-
 if (_environment === 'production') {
     const rateLimit = require("express-rate-limit");
     const limiter = rateLimit({
@@ -54,6 +53,7 @@ app.get("/htmlResponse", (req, res) => {
               text-align: center;
               }
               </style>
+              <title>Puzzle Temperature</title>
             </head>
             <body>
             <h1 class="test">Arduino Thermometer</h1>
@@ -77,6 +77,7 @@ app.get("/changeWebserver/:changing", (req) => {
         // Turn on
     } else if (changing === "stop") {
         // Stop WS
+        process.exit();
     }
 });
 
