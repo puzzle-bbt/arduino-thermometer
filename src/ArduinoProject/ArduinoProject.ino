@@ -31,8 +31,8 @@ int buttonStateB = 0;
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
 
-#define WIFI_SSID "Matarese.guest"
-#define WIFI_PASSWORD "Madrid_Mai"
+#define WIFI_SSID "puzzleguest"
+#define WIFI_PASSWORD "Tarwinn7"
 
 
 boolean onMenuPage = false;
@@ -92,7 +92,8 @@ void loop() {
     } else {
      showMenu();
     }
-  } else {
+  } 
+  else {
      urlParams = getMeasurment();
   }
 
@@ -103,7 +104,7 @@ void loop() {
 void sendRestCall(String urlParams) {
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
       HTTPClient http;  //Declare an object of class HTTPClient
-      String url = "http://192.168.141.18:8080/sendDatas/" + urlParams;
+      String url = "http://10.13.252.3:8080/sendDatas/" + urlParams;
       Serial.println(url);
       http.begin(url);
       int httpCode = http.GET();
@@ -221,7 +222,7 @@ void showChangingPage() {
   display.clearDisplay();
   display.setCursor(0,0);
   display.setTextSize(1);
-  display.println("Press A to start WS");
+  display.println("Press A to go back");
   display.println("Press B to stop WS");
   display.display();
 
@@ -229,14 +230,13 @@ void showChangingPage() {
   buttonStateB = digitalRead(buttonB);
  
   if (buttonStateA == LOW) {
-      changeWebserver("start");
       onChangingPage = false;
       onMenuPage = true;
    }
    else if (buttonStateB == LOW) {
      changeWebserver("stop");
      onChangingPage = false;
-     onMenuPage = true;
+     onMenuPage = false;
   }
 
 
@@ -247,7 +247,7 @@ void showChangingPage() {
 void changeWebserver(String changing) {
   if (WiFi.status() == WL_CONNECTED) { //Check WiFi connection status
       HTTPClient http;  //Declare an object of class HTTPClient
-      String url = "http://192.168.141.18:8080/changeWebserver/" + changing;
+      String url = "http://10.13.252.3:8080/changeWebserver/" + changing;
       Serial.println(url);
       http.begin(url);
       int httpCode = http.GET();
